@@ -1,0 +1,12 @@
+environments:
+  production:
+
+repositories:
+- name: jetstack
+  url: https://charts.jetstack.io
+
+releases:
+- name: cert-manager
+  namespace: cert-manager
+  chart: jetstack/cert-manager  # https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm
+  version: v0.15.2  # Update has dependency in scripts/preflight.sh

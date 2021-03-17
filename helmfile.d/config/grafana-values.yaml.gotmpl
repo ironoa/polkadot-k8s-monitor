@@ -1,0 +1,53 @@
+env:
+  GF_EXPLORE_ENABLED: true
+admin:
+  existingSecret: grafanacred
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://prometheus-operator-prometheus:9090/
+      access: proxy
+      isDefault: true
+    - name: Loki
+      type: loki
+      url: http://loki:3100/
+      access: proxy
+      isDefault: false
+      editable: false
+plugins:
+- grafana-piechart-panel
+dashboardProviders:
+  dashboardproviders.yaml:
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      editable: true
+      options:
+        path: /var/lib/grafana/dashboards/default
+dashboards:
+  default:
+    kubernetes-app-metrics:
+      gnetId: 12841
+      revision: 1
+      datasource: Prometheus 
+    polkadot-dashboard:
+      gnetId: 13697
+      revision: 1
+      datasource: Prometheus   
+    node-exporter:
+      gnetId: 1860
+      datasource: Prometheus
+      revision: 21
+    kubernetes-pod-overview:
+      gnetId: 12842
+      revision: 2
+      datasource: Prometheus     
+persistence:
+  enabled: true

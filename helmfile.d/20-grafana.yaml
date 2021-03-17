@@ -1,0 +1,14 @@
+environments:
+  production:
+  local:
+
+repositories:
+- name: grafana
+  url: https://grafana.github.io/helm-charts
+
+releases:
+- name: grafana
+  chart: grafana/grafana
+  version: 6.1.17
+  values:
+  - ./config/grafana-values.yaml.gotmpl

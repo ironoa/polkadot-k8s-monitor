@@ -1,0 +1,13 @@
+environments:
+  production:
+
+repositories:
+- name: ingress-nginx
+  url: https://kubernetes.github.io/ingress-nginx
+
+releases:
+- name: nginx-ingress
+  chart: ingress-nginx/ingress-nginx
+  version: 3.23.0
+  values:
+  - ./config/nginx-ingress-values.yaml.gotmpl

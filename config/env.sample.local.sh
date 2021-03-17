@@ -1,0 +1,15 @@
+export GRAFANA_PASSWORD="xxx"
+
+export POLKADOT_NODE_EXPORTER_PASSWORD='xxx'
+
+export KUSAMA_VALIDATOR_MATRIXBOT_USER='@xxx:matrix.org'
+export KUSAMA_VALIDATOR_MATRIXBOT_PASSWORD='xxx'
+export KUSAMA_VALIDATOR_MATRIXBOT_ROOM_ID='!xxx:matrix.org'
+
+export POLKADOT_VALIDATOR_MATRIXBOT_USER='@xxx:matrix.org'
+export POLKADOT_VALIDATOR_MATRIXBOT_PASSWORD='xxx'
+export POLKADOT_VALIDATOR_MATRIXBOT_ROOM_ID='!xxx:matrix.org'
+
+export MATRIXBOT_USER='@xxx:matrix.org'
+export MATRIXBOT_PASSWORD='xxx'
+export MATRIXBOT_ROOM_ID='!xxx:matrix.org'
