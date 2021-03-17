@@ -4,7 +4,7 @@ A tool to deploy a Kubernetes monitoring cluster for your substrate based nodes.
 
 ## My on chain identity
 
-ALESSIO (on Polkadot): 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP
+ALESSIO (on Polkadot): 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP  
 ALESSIO (on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 
 ![identity](assets/identity.png)
