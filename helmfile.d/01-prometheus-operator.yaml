@@ -1,0 +1,18 @@
+environments:
+  production:
+    values:
+    - ../config/nodes.yaml
+  local:
+    values:
+    - ../config/nodes.yaml
+
+repositories:
+- name: prometheus-community
+  url: https://prometheus-community.github.io/helm-charts
+
+releases:
+- name: prometheus-operator
+  chart: prometheus-community/kube-prometheus-stack
+  version: 13.2.1
+  values:
+  - ./config/prometheus-operator-values.yaml.gotmpl

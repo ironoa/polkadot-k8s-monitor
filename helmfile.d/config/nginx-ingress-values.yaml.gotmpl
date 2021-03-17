@@ -1,0 +1,24 @@
+controller:
+  publishService:
+    enabled: "true"
+  service:
+    externalTrafficPolicy: "Local"
+  replicaCount: 1
+  stats:
+    enabled: true
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+  config:
+    proxy-body-size: "10m"
+    use-http2: "false"
+    server-tokens: "false"
+  admissionWebhooks:
+    enabled: false   
+  resources:
+    requests:
+      cpu: 10m
+defaultBackend:
+  enabled: true
+  replicaCount: 1

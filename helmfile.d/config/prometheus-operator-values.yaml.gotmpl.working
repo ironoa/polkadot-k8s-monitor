@@ -1,0 +1,132 @@
+nameOverride: "prometheus-operator"
+fullnameOverride: "prometheus-operator"
+
+defaultRules:
+  create: false
+commonLabels:
+  group: polkadot
+kubeDns:
+  enabled: true
+coreDns:
+  enabled: false
+kubeApiServer:
+  enabled: false
+grafana:
+  enabled: false
+nodeExporter:
+  enabled: false
+prometheus:
+  prometheusSpec:
+    ruleSelector:
+      matchExpressions:
+      - key: app
+        operator: In
+        values:
+        - polkadot
+        - prometheus-operator
+        - w3f
+    serviceMonitorSelector:
+      matchLabels:
+        group: polkadot
+        group: w3f
+{{ if ne .Environment.Name "ci" }}
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+    additionalScrapeConfigs:
+    {{- range $index, $value := .Environment.Values.validatorsKusama }}
+    - job_name: ne-{{ $value.name }}
+      basic_auth:
+        username: prometheus
+        password: {{ env "POLKADOT_NODE_EXPORTER_PASSWORD" | default "node_exporter" | quote }}
+      static_configs:
+      - targets:
+        - {{ $value.ip }}:9100
+        - {{ $value.ip }}:9616
+        labels:
+          node: {{ $value.name }}
+    {{- end }}
+    {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
+    - job_name: ne-{{ $value.name }}
+      basic_auth:
+        username: prometheus
+        password: {{ env "POLKADOT_NODE_EXPORTER_PASSWORD" | default "node_exporter" | quote }}
+      static_configs:
+      - targets:
+        - {{ $value.ip }}:9100
+        - {{ $value.ip }}:9616
+        labels:
+          node: {{ $value.name }}
+    {{- end }}
+{{ end }}
+
+alertmanager:
+  config:
+    route:
+      group_by: ['alertname']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: default
+      routes:
+      - receiver: kusama-validator-matrixbot
+        match:
+          job: kusama-validator-watcher
+          namespace: kusama
+      - receiver: polkadot-validator-matrixbot
+        match:
+          job: polkadot-validator-watcher
+          namespace: polkadot
+      - receiver: default
+
+    receivers:
+    - name: default
+      webhook_configs:
+      - url:  "http://matrixbot:8080/skill/alertmanager/webhook"
+    - name: kusama-validator-matrixbot
+      webhook_configs:
+      - url:  "http://kusama-validator-watcher-matrixbot.kusama.svc.cluster.local:8080/skill/alertmanager/webhook"
+    - name: polkadot-validator-matrixbot
+      webhook_configs:
+      - url:  "http://polkadot-validator-watcher-matrixbot.polkadot.svc.cluster.local:8080/skill/alertmanager/webhook"
+
+{{ if ne .Environment.Name "local" }}
+  alertmanagerSpec:
+    logLevel: debug
+    replicas: 1
+    resources:
+      limits:
+        cpu: 50m
+        memory: 600Mi
+      requests:
+        cpu: 10m
+        memory: 200Mi
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+prometheusOperator:
+  resources:
+    limits:
+      cpu: 150m
+      memory: 600Mi
+    requests:
+      cpu: 50m
+      memory: 200Mi              
+
+kubeStateMetrics:
+  resources:
+    limits:
+      cpu: 10m
+      memory: 64Mi
+    requests:
+      cpu: 2m
+      memory: 16Mi      
+{{ end }}

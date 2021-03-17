@@ -1,0 +1,26 @@
+environment: {{ .Environment.Name }}
+
+config:
+  endpoint: "wss://rpc.polkadot.io/"
+  port: 3000
+  logLevel: info
+  networkId: polkadot
+  matrixbot:
+    endpoint: "http://polkadot-validator-watcher-matrixbot:8080/skill/eventmanager/webhook"
+  validators:
+  {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
+  - name: {{ $value.name }}
+    address: {{ $value.stashAccount }}
+  {{- end }}
+  subscribe:
+    transactions: []
+    producers: true
+    offline: true
+
+resources:
+  requests:
+    cpu: 1m
+    memory: 100Mi
+  limits:
+    cpu: 600m
+    memory: 500Mi

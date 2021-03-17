@@ -1,0 +1,23 @@
+{{ if eq .Environment.Name "local" }}
+environment: ci   
+{{ else }}
+environment: {{ .Environment.Name }}
+{{ end }}
+
+origin: monitoring
+
+grafana:
+  enabled: true
+  password: {{ env "GRAFANA_PASSWORD" | default "admin" | quote }}
+  domain: {{ env "GRAFANA_DOMAIN" | default "example.com" | quote }}
+
+cloudflareApiToken: {{ env "CLOUDFLARE_API_TOKEN" | default "" }}
+
+issuer:
+  acme:
+    server: {{ env "LETSENCRYPT_ACME_SERVER" | default "https://acme-v02.api.letsencrypt.org/directory" | quote }}
+    email: {{ env "LETSENCRYPT_ACME_EMAIL" | default "email" | quote }}
+
+  solvers:
+    cloudflare:
+      email: {{ env "LETSENCRYPT_SOLVER_CLOUDFLARE_EMAIL" | default "email" | quote }}
