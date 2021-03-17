@@ -2,7 +2,7 @@
 
 A tool to deploy a Kubernetes monitoring cluster for your substrate based nodes. The focus is specific on Validators.
 
-## My on chain identity
+## My on-chain Identity
 
 ALESSIO (on Polkadot): 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP  
 ALESSIO (on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
@@ -17,9 +17,10 @@ ALESSIO (on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 ## Table Of Contents
 
 * [Requirements](#requirements)
+* [Polkadot Secure Validator](#polkadot-secure-validator)
 * [How To Configure the Application](#how-to-configure-the-application)
-* [How To Run it locally](#how-to-run-it-locally)
-* [How To Run it in production](#how-to-run-it-in-production)
+* [How To Deploy it Locally](#how-to-deploy-it-locally)
+* [How To Deploy it in Production](#how-to-deploy-it-in-production)
 * [How it will look like](#how-it-will-look-like)
 * [Future Developments](#future-developments)
 
@@ -27,6 +28,9 @@ ALESSIO (on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 * kind (if you want to run it locally): https://kind.sigs.k8s.io/docs/user/quick-start/#installation
 * kubectl: https://kubernetes.io/docs/tasks/tools/
 * helmfile: https://github.com/roboll/helmfile#installation => brew install helmfile (on macOS)
+
+## Polkadot Secure Validator
+This project is particularly suited to be working in synergy with the polkadot-secure-validator, the official node deployment tool from Web3 Foundation: https://github.com/w3f/polkadot-secure-validator 
 
 ## How To Configure the Application
 
@@ -43,7 +47,7 @@ validatorsKusama:
   ip: x.x.x.x 
 ```
 
-You can find two samples of the configurable environment variables related sh files, containings also your secrets and passwords:  
+You can find two samples of the environment variables related files, meant to contain also your secrets and your passwords:  
 * the complete configuration [file](config/env.sample.complete.sh), production ready  
 * the local configuration [file](config/env.sample.local.sh), ready to be deployed into a local kind cluster  
 
@@ -65,7 +69,7 @@ export MATRIXBOT_PASSWORD='xxx'
 export MATRIXBOT_ROOM_ID='!xxx:matrix.org'
 ```
 
-## How To Run it locally
+## How To Deploy it Locally
 I'd reccomend to test first this approach 
 
 ```bash
@@ -82,7 +86,7 @@ cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config f
 #./scripts/uninstallLocal.sh
 ```
 
-## How To Run it in production
+## How To Deploy it in Production
 First, connect yourself to your chosen kubernetes cluster.
 
 ```bash
