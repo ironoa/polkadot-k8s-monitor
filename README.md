@@ -1,11 +1,11 @@
 # Polkadot-K8s-Monitor
 
-A tool to deploy a Kubernetes monitoring cluster for your substrate based nodes. The focus is specific on Validators.
+A tool to deploy a Monitoring System in a Kubernetes cluster for your Substrate based Nodes. The focus is specific on Validators.
 
 ## My on-chain Identity
 
-ALESSIO (on Polkadot): 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP  
-ALESSIO (on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
+ALESSIO (Validator on Polkadot): 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP  
+ALESSIO (Validator on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 
 ![identity](assets/identity.png)
 
@@ -25,7 +25,8 @@ ALESSIO (on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 * [Future Developments](#future-developments)
 
 ## Requirements
-* kind (if you want to run it locally): https://kind.sigs.k8s.io/docs/user/quick-start/#installation
+* kind (if you want to deploy it locally): https://kind.sigs.k8s.io/docs/user/quick-start/#installation
+* A Kubernetes cluster (if you don't want to use kind)
 * kubectl: https://kubernetes.io/docs/tasks/tools/
 * helmfile: https://github.com/roboll/helmfile#installation => brew install helmfile (on macOS)
 
