@@ -16,6 +16,11 @@ if ! [ -x "$(command -v kubectl)" ]; then
   exit 1
 fi
 
+if ! [ -x "$(command -v helmfile)" ]; then
+  echo 'Error: helmfile is not installed.' >&2
+  exit 1
+fi
+
 if ! [ -x "$(command -v kind)" ]; then
   echo 'Error: kind is not installed.' >&2
   exit 1

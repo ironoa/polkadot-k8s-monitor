@@ -9,6 +9,11 @@ if ! [ -f ../config/env.sh ]; then
   exit 1
 fi
 
+if ! [ -x "$(command -v helmfile)" ]; then
+  echo 'Error: helmfile is not installed.' >&2
+  exit 1
+fi
+
 if ! [ -x "$(command -v kubectl)" ]; then
   echo 'Error: kubectl is not installed.' >&2
   exit 1
