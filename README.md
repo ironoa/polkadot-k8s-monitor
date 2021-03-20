@@ -1,6 +1,6 @@
 # Polkadot-K8s-Monitor
 
-A tool to deploy a Monitoring System in a Kubernetes cluster for your Substrate based Nodes. The focus is specific on Validators.
+A tool to deploy a Monitoring System for your Substrate based Nodes in a Kubernetes cluster. The focus is specific on Validators.
 
 ## My on-chain Identity
 
