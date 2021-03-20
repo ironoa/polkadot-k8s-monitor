@@ -53,10 +53,12 @@ You can find two samples of the environment variables related files, meant to co
 * the local configuration [file](config/env.sample.local.sh), ready to be deployed into a local kind cluster  
 
 ```sh
-export GRAFANA_PASSWORD="xxx"
+export GRAFANA_PASSWORD="xxx" #Optional: default "admin"
 
-export POLKADOT_NODE_EXPORTER_PASSWORD='xxx'
+export NODE_EXPORTER_USERNAME='xxx' #Optional: default "prometheus"
+export NODE_EXPORTER_PASSWORD='xxx' #Optional: default "node_exporter"
 
+#### Optional: if you want the Matrix/Riot notifications working #####
 export KUSAMA_VALIDATOR_MATRIXBOT_USER='@xxx:matrix.org'
 export KUSAMA_VALIDATOR_MATRIXBOT_PASSWORD='xxx'
 export KUSAMA_VALIDATOR_MATRIXBOT_ROOM_ID='!xxx:matrix.org'
@@ -68,6 +70,7 @@ export POLKADOT_VALIDATOR_MATRIXBOT_ROOM_ID='!xxx:matrix.org'
 export MATRIXBOT_USER='@xxx:matrix.org'
 export MATRIXBOT_PASSWORD='xxx'
 export MATRIXBOT_ROOM_ID='!xxx:matrix.org'
+######################################################################
 ```
 
 ## How To Deploy it Locally
