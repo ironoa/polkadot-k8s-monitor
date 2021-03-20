@@ -55,7 +55,8 @@ You can find two samples of the environment variables related files, meant to co
 ```sh
 export GRAFANA_PASSWORD="xxx"
 
-export POLKADOT_NODE_EXPORTER_PASSWORD='xxx'
+export NODE_EXPORTER_USERNAME='xxx'
+export NODE_EXPORTER_PASSWORD='xxx'
 
 export KUSAMA_VALIDATOR_MATRIXBOT_USER='@xxx:matrix.org'
 export KUSAMA_VALIDATOR_MATRIXBOT_PASSWORD='xxx'
