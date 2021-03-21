@@ -28,7 +28,7 @@ fi
 
 source ../config/env.sh
 
-if ! [ $(kind get clusters | grep $CLUSTER_NAME) == $CLUSTER_NAME ]; then
+if [ -z $(kind get clusters | grep "^$CLUSTER_NAME$") ]; then
   kind create cluster --name $CLUSTER_NAME
 fi
 
