@@ -14,6 +14,10 @@ ALESSIO (Validator on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 
 ![architecture](assets/architecture.png)
 
+## Youtube
+
+* [Tutorial: Local Deployment](https://www.youtube.com/watch?v=6WdcC6o49QI)
+
 ## Table Of Contents
 
 * [Requirements](#requirements)
@@ -56,8 +60,8 @@ You can find two samples of the environment variables related files, meant to co
 ```sh
 export GRAFANA_PASSWORD="xxx" #Optional: default "admin"
 
-export NODE_EXPORTER_USERNAME='xxx' #Optional: default "prometheus"
-export NODE_EXPORTER_PASSWORD='xxx' #Optional: default "node_exporter"
+export VALIDATOR_HTTP_AUTH_USER='xxx' #Optional: default "prometheus"
+export VALIDATOR_HTTP_AUTH_PASSWORD='xxx' #Optional: default "nginx_password"
 
 #### Optional: if you want the Matrix/Riot notifications working #####
 export KUSAMA_VALIDATOR_MATRIXBOT_USER='@xxx:matrix.org'
@@ -113,4 +117,4 @@ cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config f
 
 ## Future Developments
 - [ ] Improve the documentation
-- [ ] Youtube tutorials 
+- [X] Youtube tutorials 
