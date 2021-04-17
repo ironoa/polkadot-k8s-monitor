@@ -4,18 +4,17 @@ config:
   endpoint: "wss://rpc.polkadot.io/"
   port: 3000
   logLevel: info
-  networkId: polkadot
-  matrixbot:
-    endpoint: "http://polkadot-validator-watcher-matrixbot:8080/skill/eventmanager/webhook"
-  validators:
+  validators: {{ if eq (len .Environment.Values.validatorsPolkadot) 0 }} [] {{ end }}
   {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
   - name: {{ $value.name }}
     address: {{ $value.stashAccount }}
   {{- end }}
   subscribe:
-    transactions: []
     producers: true
     offline: true
+
+networkId: polkadot
+origin: monitoring  
 
 resources:
   requests:

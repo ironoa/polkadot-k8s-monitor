@@ -4,18 +4,17 @@ config:
   endpoint: "wss://kusama-rpc.polkadot.io/"
   port: 3000
   logLevel: info
-  networkId: kusama
-  matrixbot:
-    endpoint: "http://kusama-validator-watcher-matrixbot:8080/skill/eventmanager/webhook"
-  validators:
+  validators: {{ if eq (len .Environment.Values.validatorsKusama) 0 }} [] {{ end }}
   {{- range $index, $value := .Environment.Values.validatorsKusama }}
   - name: {{ $value.name }}
     address: {{ $value.stashAccount }}
   {{- end }}
   subscribe:
-    transactions: []
     producers: true
     offline: true
+
+networkId: kusama
+origin: monitoring  
 
 resources:
   requests:
