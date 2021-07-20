@@ -99,7 +99,7 @@ cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config f
 First, connect yourself to your chosen kubernetes cluster.
 
 ```bash
-git clone https://github.com/w3f/polkadot-k8s-monitor.git
+git clone https://github.com/ironoa/polkadot-k8s-monitor.git 
 cd polkadot-k8s-monitor
 cp config/env.sample.complete.sh config/env.sh #create the default env config file
 cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config file
