@@ -86,7 +86,7 @@ export MATRIXBOT_ROOM_ID='!xxx:matrix.org'
 I'd reccomend to test first this approach 
 
 ```bash
-git clone https://github.com/w3f/polkadot-k8s-monitor.git
+git clone https://github.com/ironoa/polkadot-k8s-monitor.git
 cd polkadot-k8s-monitor
 cp config/env.sample.local.sh config/env.sh #create the default env config file
 cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config file
