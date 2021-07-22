@@ -10,6 +10,10 @@ ALESSIO (Validator on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 ![identity](assets/identity.png)
 
 
+## Related Projects
+
+- https://github.com/ironoa/polkadot-k8s-payouts
+
 ## Application Architecture
 
 ![architecture](assets/architecture.png)
