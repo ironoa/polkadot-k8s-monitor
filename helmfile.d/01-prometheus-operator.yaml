@@ -13,6 +13,6 @@ repositories:
 releases:
 - name: prometheus-operator
   chart: prometheus-community/kube-prometheus-stack
-  version: 13.2.1
+  version: 13.13.1
   values:
   - ./config/prometheus-operator-values.yaml.gotmpl

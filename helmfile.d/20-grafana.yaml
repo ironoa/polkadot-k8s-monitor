@@ -9,6 +9,6 @@ repositories:
 releases:
 - name: grafana
   chart: grafana/grafana
-  version: 6.1.17
+  version: 6.14.2
   values:
   - ./config/grafana-values.yaml.gotmpl
