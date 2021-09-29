@@ -9,6 +9,11 @@ if ! [ -f ../config/env.sh ]; then
   exit 1
 fi
 
+if ! [ -f ../config/nodes.yaml ]; then
+  echo "nodes.yaml does not exist. Use nodes.sample.yaml as example to generate it." >&2
+  exit 1
+fi
+
 if ! [ -x "$(command -v helmfile)" ]; then
   echo 'Error: helmfile is not installed.' >&2
   exit 1
