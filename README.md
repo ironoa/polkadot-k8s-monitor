@@ -35,7 +35,7 @@ ALESSIO (Validator on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
 ## Requirements
 * kind (if you want to deploy it locally): https://kind.sigs.k8s.io/docs/user/quick-start/#installation
 * kind requires Docker: https://docs.docker.com/get-docker/
-* A Kubernetes cluster (if you don't want to use kind)
+* A Kubernetes cluster (if you don't want to use kind). Version 1.21+
 * kubectl: https://kubernetes.io/docs/tasks/tools/
 * helmfile: https://github.com/roboll/helmfile#installation => brew install helmfile (on macOS)
 

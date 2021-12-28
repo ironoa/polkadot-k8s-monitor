@@ -1,0 +1,228 @@
+commonLabels:
+  group: polkadot
+defaultRules:
+  create: false
+kubeApiServer:
+  enabled: false
+coreDns:
+  enabled: false
+kubeDns:
+  enabled: true
+
+###### ALERTMANAGER #####
+alertmanager:
+  enabled: true
+  config:
+    global:
+      resolve_timeout: 5m
+    route:
+      group_by: ['alertname']
+      group_wait: 30s
+      group_interval: 5m
+      repeat_interval: 12h
+      receiver: default
+      routes:
+      - receiver: default
+        match:
+          container: promtail
+        group_interval: 12h # No frequent nagging about changes for this alert group
+      - receiver: kusama-validator-matrixbot
+        match:
+          job: kusama-validator-watcher
+          namespace: kusama
+        continue: false
+      - receiver: polkadot-validator-matrixbot
+        match:
+          job: polkadot-validator-watcher
+          namespace: polkadot
+        continue: false
+      - receiver: default
+    receivers:
+    - name: default
+      webhook_configs:
+      - url:  "http://matrixbot.monitoring:8080/skill/alertmanager/webhook"
+    - name: kusama-validator-matrixbot
+      webhook_configs:
+      - url:  "http://kusama-validator-watcher-matrixbot.kusama:8080/skill/alertmanager/webhook"
+    - name: polkadot-validator-matrixbot
+      webhook_configs:
+      - url:  "http://polkadot-validator-watcher-matrixbot.polkadot:8080/skill/alertmanager/webhook"
+{{ if ne .Environment.Name "local" }}
+  alertmanagerSpec:
+    logLevel: debug
+    replicas: 1
+    resources:
+      limits:
+        cpu: 50m
+        memory: 100Mi
+      requests:
+        cpu: 15m
+        memory: 20Mi
+    storage:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+{{ end }}        
+################      
+  
+
+###### GRAFANA #####
+grafana:
+  enabled: true
+  adminPassword: {{ env "GRAFANA_PASSWORD" | default "admin" }}
+  ingress:
+    enabled: true
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
+      nginx.ingress.kubernetes.io/limit-rps: "10"
+{{ if ne .Environment.Name "local" }}
+      cert-manager.io/cluster-issuer: letsencrypt
+{{ end }}
+    hosts:
+      - {{ env "GRAFANA_DOMAIN" | default "example.com" | quote }}
+    tls:
+      - secretName: grafana-tls
+        hosts:
+        - {{ env "GRAFANA_DOMAIN" | default "example.com" | quote }}
+  additionalDataSources:
+  - name: Loki
+    type: loki
+    url: http://loki:3100/
+    access: proxy
+    isDefault: false
+    editable: false
+  serviceMonitor:
+    selfMonitor: false
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: 'default'
+        orgId: 1
+        folder: ''
+        type: file
+        disableDeletion: false
+        editable: true
+        options:
+          path: /var/lib/grafana/dashboards/default
+  dashboards:
+    default:
+      nginx-ingress:
+        gnetId: 9614
+        datasource: Prometheus
+      polkadot-metrics:
+        gnetId: 11171
+        revision: 1
+        datasource: Prometheus
+      polkadot-dashboard:
+        gnetId: 13697
+        revision: 1
+        datasource: Prometheus  
+      node-exporter:
+        gnetId: 1860
+        datasource: Prometheus
+        revision: 21  
+      kubernetes-pod-overview:
+        gnetId: 12842
+        revision: 2
+        datasource: Prometheus  
+################
+
+
+nodeExporter:
+  enabled: true
+prometheus-node-exporter:
+  podLabels:
+    ## Add the 'node-exporter' label to be used by serviceMonitor to match standard common usage in rules and grafana dashboards
+    ##
+    jobLabel: node-exporter
+    group: polkadot
+  extraArgs:
+    - --collector.filesystem.ignored-mount-points=^/(dev|proc|sys|var/lib/docker/.+|var/lib/kubelet/.+)($|/)
+    - --collector.filesystem.ignored-fs-types=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
+
+
+
+prometheusOperator:
+  enabled: true
+  tls:
+    enabled: false
+  admissionWebhooks:
+    enabled: false
+{{ if ne .Environment.Name "local" }}
+  resources:
+    limits:
+      cpu: 100m
+      memory: 200Mi
+    requests:
+      cpu: 30m
+      memory: 70Mi
+{{ end }}
+
+
+###### PROMETHEUS #####
+prometheus:
+  enabled: true
+  prometheusSpec:
+    ruleSelectorNilUsesHelmValues: false
+    ruleSelector: {}
+    serviceMonitorSelectorNilUsesHelmValues: false
+    serviceMonitorSelector: {}
+{{ if ne .Environment.Name "local" }}
+    {{/* resources:
+      requests:
+        cpu: 500m
+        memory: 2Gi
+      limits:
+        cpu: 700m
+        memory: 3Gi */}}
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          accessModes: ["ReadWriteOnce"]
+          resources:
+            requests:
+              storage: 10Gi
+    additionalScrapeConfigs:
+    {{- range $index, $value := .Environment.Values.validatorsKusama }}
+    - job_name: ne-{{ $value.name }}
+      basic_auth:
+        username: {{ env "VALIDATOR_HTTP_AUTH_USER" | default "prometheus" | quote }}
+        password: {{ env "VALIDATOR_HTTP_AUTH_PASSWORD" | default "nginx_password" | quote }}
+      static_configs:
+      - targets:
+        - {{ $value.ip }}:9100
+        - {{ $value.ip }}:9616
+        labels:
+          node: {{ $value.name }}
+    {{- end }}
+    {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
+    - job_name: ne-{{ $value.name }}
+      basic_auth:
+        username: {{ env "VALIDATOR_HTTP_AUTH_USER" | default "prometheus" | quote }}
+        password: {{ env "VALIDATOR_HTTP_AUTH_PASSWORD" | default "nginx_password" | quote }}
+      static_configs:
+      - targets:
+        - {{ $value.ip }}:9100
+        - {{ $value.ip }}:9616
+        labels:
+          node: {{ $value.name }}
+    {{- end }}          
+{{ end }}
+################
+
+
+
+{{ if ne .Environment.Name "local" }}  
+kubeStateMetrics:
+  resources:
+    limits:
+      cpu: 10m
+      memory: 64Mi
+    requests:
+      cpu: 2m
+      memory: 16Mi
+{{ end }}

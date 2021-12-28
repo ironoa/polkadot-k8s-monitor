@@ -1,0 +1,18 @@
+environment: {{ .Environment.Name }}
+
+serviceMonitor:
+  enabled: true
+  labels:
+    group: polkadot
+    release: prometheus-operator
+
+prometheusRules:
+  enabled: false #to be enabled for just one of the instances
+
+resources:
+  requests:
+    cpu: 1m
+    memory: 100Mi
+  limits:
+    cpu: 600m
+    memory: 500Mi

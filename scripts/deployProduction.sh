@@ -25,7 +25,6 @@ if ! [ -x "$(command -v kubectl)" ]; then
 fi
 
 source ../config/env.sh
-./preflight.sh
 
 helm repo update
 helmfile --environment production -f ../helmfile.pre.d sync

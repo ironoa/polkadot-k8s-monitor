@@ -9,6 +9,6 @@ repositories:
 releases:
 - name: base-services
   chart: w3f/base-services
-  version: v1.0.2
+  version: v1.4.5
   values:
   - ./config/base-services.yaml.gotmpl

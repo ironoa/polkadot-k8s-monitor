@@ -13,13 +13,7 @@ config:
     producers: true
     offline: true
 
-networkId: polkadot
-origin: monitoring  
-
-resources:
-  requests:
-    cpu: 1m
-    memory: 100Mi
-  limits:
-    cpu: 600m
-    memory: 500Mi
+prometheusRules:
+  enabled: true
+  origin: monitoring
+  heartbeat: false

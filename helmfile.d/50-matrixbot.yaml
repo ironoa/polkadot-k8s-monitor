@@ -8,15 +8,16 @@ repositories:
 
 releases:
 - name: matrixbot
+  namespace: monitoring
   chart: w3f/matrixbot
-  version: v1.1.3
+  version: v1.3.1
   values:
   - ./config/matrixbot-values.yaml.gotmpl
 
 - name: kusama-validator-watcher-matrixbot
   namespace: kusama
   chart: w3f/matrixbot
-  version: v1.1.3
+  version: v1.3.1
   values:
   - ./config/matrixbot-values.yaml.gotmpl  
   - ./config/kusama/validator-matrixbot-values.yaml.gotmpl
@@ -24,7 +25,7 @@ releases:
 - name: polkadot-validator-watcher-matrixbot
   namespace: polkadot
   chart: w3f/matrixbot
-  version: v1.1.3
+  version: v1.3.1
   values:
   - ./config/matrixbot-values.yaml.gotmpl  
   - ./config/polkadot/validator-matrixbot-values.yaml.gotmpl

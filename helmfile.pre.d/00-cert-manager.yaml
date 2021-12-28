@@ -9,4 +9,6 @@ releases:
 - name: cert-manager
   namespace: cert-manager
   chart: jetstack/cert-manager  # https://cert-manager.io/docs/installation/kubernetes/#installing-with-helm
-  version: v0.15.2  # Update has dependency in scripts/preflight.sh
+  version: v1.6.1
+  values:
+  - ./config/cert-manager-values.yaml.gotmpl

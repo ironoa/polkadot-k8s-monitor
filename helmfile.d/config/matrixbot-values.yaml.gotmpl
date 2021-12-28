@@ -1,16 +1,18 @@
 botUser: {{ env "MATRIXBOT_USER" | default "matrixbot_user" | quote }}
 botPassword: {{ env "MATRIXBOT_PASSWORD" | default "matrixbot_password" | quote }}
 roomId: {{ env "MATRIXBOT_ROOM_ID" | default "matrixbot_room_id" | quote }}
-image:
-  tag: v1.1.3
 
 homeserver: "https://matrix.org"
+
+skills:
+- name: alertmanager
+  path: /app/skills/skill-alertmanager
 
 replicas: 1
 resources:
   requests:
-    cpu: 5m
-    memory: 50Mi
+    cpu: 15m
+    memory: 30Mi
   limits:
-    cpu: 50m
-    memory: 200Mi 
+    cpu: 60m
+    memory: 90Mi 
