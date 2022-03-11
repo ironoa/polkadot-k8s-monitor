@@ -8,11 +8,11 @@ config:
   snippets:    
     pipelineStages:
     - match:
-        selector: '{app=~".*watcher.*"} |~ ".*disconnected from ws.*"'
+        selector: '{app=~".*watcher.*|.*polkadot.*|.*kusama.*"} |~ "(?)disconnected from ws"'
         action: drop
         drop_counter_reason: promtail_noisy_error
     - match:
-        selector: '{app=~".*watcher.*",stream="stderr"}'
+        selector: '{app=~".*watcher.*|.*polkadot.*|.*kusama.*"}'
         stages:
         - metrics:
             log_errors_total:
@@ -24,7 +24,7 @@ config:
                 match_all: true
                 action: inc
     - match:
-          selector: '{app=~".*watcher.*|.*polkadot.*|.*kusama.*"} |~ ".*error.*|.*Error.*|.*ERROR.*"'
+          selector: '{app=~".*watcher.*|.*polkadot.*|.*kusama.*|.*matrixbot.*"} |~ "(?)error"'
           stages:
           - metrics:
               app_log_errors_total:

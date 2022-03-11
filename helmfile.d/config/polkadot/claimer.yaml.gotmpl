@@ -1,0 +1,16 @@
+config:
+  wsEndpoint: "wss://rpc.polkadot.io/"
+  claimThirdParty:
+    targets:
+    {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
+    - alias: {{ $value.name }}
+      validatorAddress: {{ $value.stashAccount }}  
+    {{- end }}
+
+secret:
+  claimerPasswordValue: {{ env "POLKADOT_CLAIMER_PASSWORD" }}
+  claimerWalletValue: |
+    {{ env "POLKADOT_CLAIMER_WALLET" }} 
+
+cronjob:
+  schedule: "0 4,16 * * *"

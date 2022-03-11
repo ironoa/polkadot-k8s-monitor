@@ -77,7 +77,6 @@ grafana:
     enabled: true
     annotations:
       kubernetes.io/ingress.class: "nginx"
-      nginx.ingress.kubernetes.io/limit-rps: "10"
 {{ if ne .Environment.Name "local" }}
       cert-manager.io/cluster-issuer: letsencrypt
 {{ end }}
@@ -194,8 +193,8 @@ prometheus:
         password: {{ env "VALIDATOR_HTTP_AUTH_PASSWORD" | default "nginx_password" | quote }}
       static_configs:
       - targets:
-        - {{ $value.ip }}:9100
-        - {{ $value.ip }}:9616
+        - {{ $value.ip }}:{{$value.nodeExporterPort | default 9100}}
+        - {{ $value.ip }}:{{$value.nodeMetricsPort | default 9616}}
         labels:
           node: {{ $value.name }}
     {{- end }}
@@ -206,8 +205,8 @@ prometheus:
         password: {{ env "VALIDATOR_HTTP_AUTH_PASSWORD" | default "nginx_password" | quote }}
       static_configs:
       - targets:
-        - {{ $value.ip }}:9100
-        - {{ $value.ip }}:9616
+        - {{ $value.ip }}:{{$value.nodeExporterPort | default 9100}}
+        - {{ $value.ip }}:{{$value.nodeMetricsPort | default 9616}}
         labels:
           node: {{ $value.name }}
     {{- end }}          
