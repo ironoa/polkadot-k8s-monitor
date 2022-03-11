@@ -1,8 +1,7 @@
-validatorsPolkadot:
+nodes:
 - name: polkadot-node-0
-  stashAccount: YourPolkadotStashAddress
   ip: x.x.x.x   
-validatorsKusama: 
 - name: kusama-node-0
-  stashAccount: YourKusamaStashAddress
   ip: x.x.x.x 
+  nodeExporterPort: 9100 #Optional
+  validatorMetricsPort: 9616 #Optional
