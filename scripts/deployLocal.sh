@@ -16,6 +16,11 @@ if ! [ -f ../config/nodes.yaml ]; then
   exit 1
 fi
 
+if ! [ -f ../config/validators.yaml ]; then
+  echo "validators.yaml does not exist. Use validators.sample.yaml as example to generate it." >&2
+  exit 1
+fi
+
 if ! [ -x "$(command -v kubectl)" ]; then
   echo 'Error: kubectl is not installed.' >&2
   exit 1

@@ -8,6 +8,7 @@ repositories:
 releases:
 - name: external-dns
   chart: bitnami/external-dns
-  version: 5.6.0
+  namespace: default
+  version: 6.1.8
   values:
   - ./config/external-dns-values.yaml.gotmpl

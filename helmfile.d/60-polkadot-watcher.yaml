@@ -1,10 +1,10 @@
 environments:
   production:
     values:
-    - ../config/nodes.yaml
+    - ../config/validators.yaml
   local:
     values:
-    - ../config/nodes.yaml
+    - ../config/validators.yaml
 
 repositories:
 - name: w3f
@@ -15,7 +15,7 @@ releases:
 - name: kusama-validator-watcher
   namespace: kusama
   chart: w3f/polkadot-watcher
-  version: v3.1.3
+  version: v3.2.4
   values:
   - ./config/watcher.yaml.gotmpl
   - ./config/kusama/validator-watcher-values.yaml.gotmpl
@@ -23,7 +23,7 @@ releases:
 - name: polkadot-validator-watcher
   namespace: polkadot
   chart: w3f/polkadot-watcher
-  version: v3.1.3
+  version: v3.2.4
   values:
   - ./config/watcher.yaml.gotmpl
   - ./config/polkadot/validator-watcher-values.yaml.gotmpl
