@@ -1,22 +1,19 @@
 environments:
   production:
   local:
-
 repositories:
-- name: grafana
-  url: https://grafana.github.io/helm-charts
-
+  - name: grafana
+    url: https://grafana.github.io/helm-charts
 releases:
-- name: loki
-  chart: grafana/loki
-  version: 2.10.1
-  namespace: monitoring
-  values:
-    - ./config/loki-values.yaml.gotmpl
-- name: promtail
-  chart: grafana/promtail
-  version: 3.11.0
-  namespace: monitoring
-  values:
-    - ./config/promtail-values.yaml.gotmpl
-
+  - name: loki
+    chart: grafana/loki
+    version: 2.10.2
+    namespace: monitoring
+    values:
+      - ./config/loki-values.yaml.gotmpl
+  - name: promtail
+    chart: grafana/promtail
+    version: 3.11.0
+    namespace: monitoring
+    values:
+      - ./config/promtail-values.yaml.gotmpl
