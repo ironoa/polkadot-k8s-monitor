@@ -7,13 +7,13 @@ repositories:
 releases:
   - name: loki
     chart: grafana/loki
-    version: 2.10.2
+    version: 2.11.1
     namespace: monitoring
     values:
       - ./config/loki-values.yaml.gotmpl
   - name: promtail
     chart: grafana/promtail
-    version: 3.11.0
+    version: 4.2.0
     namespace: monitoring
     values:
       - ./config/promtail-values.yaml.gotmpl
