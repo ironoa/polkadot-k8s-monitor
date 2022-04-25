@@ -1,14 +1,12 @@
 environments:
   production:
-
 repositories:
-- name: ingress-nginx
-  url: https://kubernetes.github.io/ingress-nginx
-
+  - name: ingress-nginx
+    url: https://kubernetes.github.io/ingress-nginx
 releases:
-- name: nginx-ingress
-  chart: ingress-nginx/ingress-nginx
-  namespace: default
-  version: 4.0.18
-  values:
-  - ./config/nginx-ingress-values.yaml.gotmpl
+  - name: nginx-ingress
+    chart: ingress-nginx/ingress-nginx
+    namespace: default
+    version: 4.0.19
+    values:
+      - ./config/nginx-ingress-values.yaml.gotmpl
