@@ -12,14 +12,14 @@ releases:
   - name: kusama-payouts-claimer
     chart: w3f/polkadot-k8s-payouts
     namespace: kusama
-    version: v0.1.12
+    version: v0.1.13
     values:
       - ./config/claimer.yaml.gotmpl
       - ./config/kusama/claimer.yaml.gotmpl
   - name: polkadot-payouts-claimer
     chart: w3f/polkadot-k8s-payouts
     namespace: polkadot
-    version: v0.1.12
+    version: v0.1.13
     values:
       - ./config/claimer.yaml.gotmpl
       - ./config/polkadot/claimer.yaml.gotmpl
