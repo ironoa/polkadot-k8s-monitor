@@ -8,6 +8,6 @@ releases:
   - name: base-services
     chart: w3f/base-services
     namespace: default
-    version: v1.6.0
+    version: v1.5.5
     values:
       - ./config/base-services.yaml.gotmpl
