@@ -9,11 +9,8 @@ config:
   - name: {{ $value.name }}
     address: {{ $value.stashAccount }}
   {{- end }}
-  subscribe:
-    producers: true
-    offline: true
 
 prometheusRules:
   enabled: true
   origin: monitoring
-  heartbeat: false
+  offlineRisk: true
