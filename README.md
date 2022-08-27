@@ -5,7 +5,8 @@ A tool to deploy a Monitoring System for your Substrate based Nodes in a Kuberne
 ## My on-chain Identity
 
 ALESSIO (Validator on Polkadot): 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP  
-ALESSIO (Validator on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
+ALESSIO (Validator0 on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
+ALESSIO (Validator1 on Kusama): GTuMySjzg6ibdn4sJ2XgS4cVH1LcjmXUWZyoxB5GPCCNRtx
 
 ![identity](assets/identity.png)
 
