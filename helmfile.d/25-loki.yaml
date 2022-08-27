@@ -13,7 +13,7 @@ releases:
       - ./config/loki-values.yaml.gotmpl
   - name: promtail
     chart: grafana/promtail
-    version: 2.12.1
+    version: 6.3.0
     namespace: monitoring
     values:
       - ./config/promtail-values.yaml.gotmpl
