@@ -1,4 +1,7 @@
-environment: {{ .Environment.Name }}
+config:
+  environment: {{ .Environment.Name }}
+  port: 3000
+  logLevel: info
 
 serviceMonitor:
   enabled: true
@@ -10,9 +13,7 @@ prometheusRules:
   enabled: false #to be enabled for just one of the instances
 
 resources:
+  limits: {}
   requests:
     cpu: 10m
-    memory: 120Mi
-  limits:
-    cpu: 100m
-    memory: 360Mi
+    memory: 50Mi

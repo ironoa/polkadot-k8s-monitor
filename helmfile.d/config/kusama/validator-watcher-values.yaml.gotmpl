@@ -1,9 +1,5 @@
-environment: {{ .Environment.Name }}
-
 config:
   endpoint: "wss://kusama-rpc.polkadot.io/"
-  port: 3000
-  logLevel: info
   validators: {{ if eq (len .Environment.Values.validatorsKusama) 0 }} [] {{ end }}
   {{- range $index, $value := .Environment.Values.validatorsKusama }}
   - name: {{ $value.name }}

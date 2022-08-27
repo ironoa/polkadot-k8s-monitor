@@ -17,8 +17,10 @@ controller:
   admissionWebhooks:
     enabled: false   
   resources:
+    limits: {}
     requests:
       cpu: 10m
+      memory: 50Mi
 defaultBackend:
   enabled: true
   replicaCount: 1
