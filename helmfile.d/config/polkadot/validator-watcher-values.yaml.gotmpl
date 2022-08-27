@@ -1,9 +1,5 @@
-environment: {{ .Environment.Name }}
-
 config:
   endpoint: "wss://rpc.polkadot.io/"
-  port: 3000
-  logLevel: info
   validators: {{ if eq (len .Environment.Values.validatorsPolkadot) 0 }} [] {{ end }}
   {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
   - name: {{ $value.name }}
@@ -14,3 +10,4 @@ prometheusRules:
   enabled: true
   origin: monitoring
   offlineRisk: true
+  producerStall: false

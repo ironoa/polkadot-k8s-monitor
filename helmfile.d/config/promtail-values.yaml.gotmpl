@@ -1,8 +1,14 @@
+resources: 
+  limits: {}
+  requests: 
+    cpu: 10m
+    memory: 50Mi
 
 serviceMonitor:
   enabled: true
   additionalLabels:
     group: polkadot
+    
 config:
   lokiAddress: http://loki:3100/loki/api/v1/push
   snippets:    

@@ -3,3 +3,9 @@ environment: {{ .Environment.Name }}
 config:
   logLevel: info
   isDeepHistoryCheckForced: false
+
+cronjob:
+  timeout: false
+  concorruencyPolicy: Forbid
+  backoffLimit: 6
+  restartPolicy: OnFailure  
