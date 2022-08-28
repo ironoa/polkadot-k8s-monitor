@@ -12,14 +12,14 @@ releases:
   - name: kusama-validator-watcher
     namespace: kusama
     chart: w3f/polkadot-watcher
-    version: v4.0.2
+    version: v4.0.3
     values:
       - ./config/watcher.yaml.gotmpl
       - ./config/kusama/validator-watcher-values.yaml.gotmpl
   - name: polkadot-validator-watcher
     namespace: polkadot
     chart: w3f/polkadot-watcher
-    version: v4.0.2
+    version: v4.0.3
     values:
       - ./config/watcher.yaml.gotmpl
       - ./config/polkadot/validator-watcher-values.yaml.gotmpl

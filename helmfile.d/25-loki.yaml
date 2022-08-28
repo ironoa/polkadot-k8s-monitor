@@ -7,7 +7,7 @@ repositories:
 releases:
   - name: loki
     chart: grafana/loki
-    version: 2.12.1
+    version: 2.12.2
     namespace: monitoring
     values:
       - ./config/loki-values.yaml.gotmpl
