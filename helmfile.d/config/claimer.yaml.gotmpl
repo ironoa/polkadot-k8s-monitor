@@ -2,7 +2,11 @@ environment: {{ .Environment.Name }}
 
 config:
   logLevel: info
-  isDeepHistoryCheckForced: false
+  claim:
+    enabled: true
+    gracePeriod:
+      enabled: false
+      eras: 2
 
 cronjob:
   timeout: false

@@ -120,8 +120,8 @@ grafana:
         datasource: Prometheus  
       node-exporter:
         gnetId: 1860
+        revision: 29
         datasource: Prometheus
-        revision: 21  
       kubernetes-pod-overview:
         gnetId: 12842
         revision: 2
@@ -206,9 +206,7 @@ prometheus:
 {{ if ne .Environment.Name "local" }}  
 kubeStateMetrics:
   resources:
-    limits:
-      cpu: 10m
-      memory: 64Mi
+    limits: {}
     requests:
       cpu: 2m
       memory: 16Mi
