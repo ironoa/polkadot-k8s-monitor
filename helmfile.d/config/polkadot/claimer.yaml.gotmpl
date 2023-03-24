@@ -1,11 +1,10 @@
 config:
   wsEndpoint: "wss://rpc.polkadot.io/"
-  claimThirdParty:
-    targets:
-    {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
-    - alias: {{ $value.name }}
-      validatorAddress: {{ $value.stashAccount }}  
-    {{- end }}
+  targets:
+  {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
+  - alias: {{ $value.name }}
+    validatorAddress: {{ $value.stashAccount }}  
+  {{- end }}
 
 secret:
   claimerPasswordValue: {{ env "POLKADOT_CLAIMER_PASSWORD" }}

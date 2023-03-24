@@ -1,11 +1,10 @@
 config:
   wsEndpoint: "wss://kusama-rpc.polkadot.io/"
-  claimThirdParty:
-    targets:
-    {{- range $index, $value := .Environment.Values.validatorsKusama }}
-    - alias: {{ $value.name }}
-      validatorAddress: {{ $value.stashAccount }}
-    {{- end }}
+  targets:
+  {{- range $index, $value := .Environment.Values.validatorsKusama }}
+  - alias: {{ $value.name }}
+    validatorAddress: {{ $value.stashAccount }}
+  {{- end }}
 
 secret:
   claimerPasswordValue: {{ env "KUSAMA_CLAIMER_PASSWORD" }}
