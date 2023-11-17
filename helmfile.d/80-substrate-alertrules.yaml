@@ -10,6 +10,6 @@ releases:
   - name: substrate-alertrules
     namespace: monitoring
     chart: w3f/substrate-alertrules
-    version: ^v0.1.4
+    version: ^v1.0.2
     values:
     - ./config/substrate-alertrules-values.yaml.gotmpl    
