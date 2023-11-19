@@ -1,11 +1,14 @@
 serviceMonitor:
   enabled: true
 
-resources: 
-  limits: null
-  requests: 
-    cpu: 10m
-    memory: 50Mi
+loki:
+  auth_enabled: false
+  commonConfig:
+    replication_factor: 1
+  storage:
+    type: 'filesystem'
+singleBinary:
+  replicas: 1
 
 #https://example.com/ready
 #ingress:
