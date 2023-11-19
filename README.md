@@ -120,6 +120,10 @@ cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config f
 ![clusterAlerts](assets/clusterAlerts.png)
 ![nodesAlerts](assets/nodesAlerts.png)
 
+## Troubleshooting
+
+- Prometheus: [Upgrading an existing Release to a new major version](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#upgrading-an-existing-release-to-a-new-major-version)
+
 ## Future Developments
 - [ ] Improve the documentation
 - [X] Youtube tutorials 
