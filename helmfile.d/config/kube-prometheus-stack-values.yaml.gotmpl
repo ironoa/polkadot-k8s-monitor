@@ -69,6 +69,15 @@ alertmanager:
 
 ###### GRAFANA #####
 grafana:
+  persistence:
+    enabled: true
+    type: sts
+    storageClassName: "standard"
+    accessModes:
+      - ReadWriteOnce
+    size: 1Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
   enabled: true
   adminPassword: {{ env "GRAFANA_PASSWORD" | default "admin" }}
   ingress:
@@ -110,14 +119,6 @@ grafana:
       nginx-ingress:
         gnetId: 9614
         datasource: Prometheus
-      polkadot-metrics:
-        gnetId: 11171
-        revision: 1
-        datasource: Prometheus
-      polkadot-dashboard:
-        gnetId: 13697
-        revision: 1
-        datasource: Prometheus  
       node-exporter:
         gnetId: 1860
         revision: 29
@@ -164,6 +165,7 @@ prometheusOperator:
 prometheus:
   enabled: true
   prometheusSpec:
+    retention: 35d
     ruleSelectorNilUsesHelmValues: false
     ruleSelector: {}
     serviceMonitorSelectorNilUsesHelmValues: false
