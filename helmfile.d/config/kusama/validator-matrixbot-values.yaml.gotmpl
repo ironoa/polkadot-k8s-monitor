@@ -1,3 +1,9 @@
 botUser: {{ env "KUSAMA_VALIDATOR_MATRIXBOT_USER" | default "matrixbot_user" | quote }}
 botPassword: {{ env "KUSAMA_VALIDATOR_MATRIXBOT_PASSWORD" | default "matrixbot_password" | quote }}
 roomId: {{ env "KUSAMA_VALIDATOR_MATRIXBOT_ROOM_ID" | default "matrixbot_room_id" | quote }}
+
+encryption:
+  enabled: true
+  store_path: "/home/opsdroid/store/"
+  deviceName: "opsdroid-kusama"
+  deviceId: "opsdroid-kusama-1"  

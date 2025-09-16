@@ -11,19 +11,17 @@ singleBinary:
   replicas: 1
 
 #https://example.com/ready
-#ingress:
-#  enabled: true
-#  annotations: 
-#    cert-manager.io/cluster-issuer: letsencrypt
-#    kubernetes.io/ingress.class: nginx
-#    nginx.ingress.kubernetes.io/auth-type: basic
-#    nginx.ingress.kubernetes.io/auth-secret: loki-auth #TOBE created: https://kubernetes.github.io/ingress-nginx/examples/auth/basic/
-#    nginx.ingress.kubernetes.io/auth-realm: "Enter your credentials"
-#  hosts:
-#    - host: {{ env "LOKI_DOMAIN" | default "example.com" | quote }}
-#      paths: 
-#      - /
-#  tls: 
-#    - secretName: loki-tls
-#      hosts:
-#      - {{ env "LOKI_DOMAIN" | default "example.com" | quote }} 
+ingress:
+  enabled: true
+  annotations: 
+    cert-manager.io/cluster-issuer: letsencrypt
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/auth-type: basic
+    nginx.ingress.kubernetes.io/auth-secret: loki-auth #TOBE created: https://kubernetes.github.io/ingress-nginx/examples/auth/basic/
+    nginx.ingress.kubernetes.io/auth-realm: "Enter your credentials"
+  hosts:
+    - {{ env "LOKI_DOMAIN" | default "example.com" | quote }}
+  tls: 
+    - secretName: loki-tls
+      hosts:
+      - {{ env "LOKI_DOMAIN" | default "example.com" | quote }} 

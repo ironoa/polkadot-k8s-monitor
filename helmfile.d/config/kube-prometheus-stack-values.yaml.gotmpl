@@ -15,6 +15,7 @@ alertmanager:
   config:
     global:
       resolve_timeout: 5m
+      pagerduty_url: "https://events.eu.pagerduty.com/v2/enqueue"
     route:
       group_by: ['alertname']
       group_wait: 30s
@@ -22,6 +23,10 @@ alertmanager:
       repeat_interval: 24h
       receiver: default
       routes:
+      - receiver: pagerduty
+        match:
+          severity: critical
+        continue: true
       - receiver: default
         match:
           container: promtail
@@ -47,6 +52,9 @@ alertmanager:
     - name: polkadot-validator-matrixbot
       webhook_configs:
       - url:  "http://polkadot-validator-watcher-matrixbot.polkadot:8080/skill/alertmanager/webhook"
+    - name: pagerduty
+      pagerduty_configs:
+      - routing_key: {{ env "PAGERDUTY_INTEGRATION_KEY" | default "YOUR-INTEGRATION-KEY" }}
 {{ if ne .Environment.Name "local" }}
   alertmanagerSpec:
     logLevel: debug

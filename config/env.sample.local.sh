@@ -14,3 +14,5 @@ export POLKADOT_VALIDATOR_MATRIXBOT_ROOM_ID='!xxx:matrix.org'
 export MATRIXBOT_USER='@xxx:matrix.org'
 export MATRIXBOT_PASSWORD='xxx'
 export MATRIXBOT_ROOM_ID='!xxx:matrix.org'
+
+export PAGERDUTY_INTEGRATION_KEY="YOUR-INTEGRATION-KEY"

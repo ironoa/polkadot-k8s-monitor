@@ -4,6 +4,16 @@ roomId: {{ env "MATRIXBOT_ROOM_ID" | default "matrixbot_room_id" | quote }}
 
 homeserver: "https://matrix.org"
 
+image:
+  repo: ironoa/matrixbot
+  tag: latest
+
+encryption:
+  enabled: true
+  store_path: "/home/opsdroid/store/"
+  deviceName: "opsdroid-monitoring"
+  deviceId: "opsdroid-monitoring-1"  
+
 skills:
 - name: alertmanager
   path: /app/skills/skill-alertmanager
