@@ -17,10 +17,10 @@ releases:
     values:
       - ./config/claimer.yaml.gotmpl
       - ./config/kusama/claimer.yaml.gotmpl
-  # - name: polkadot-payouts-claimer
-  #   chart: w3f/polkadot-k8s-payouts
-  #   namespace: polkadot
-  #   version: v1.3.0
-  #   values:
-  #     - ./config/claimer.yaml.gotmpl
-  #     - ./config/polkadot/claimer.yaml.gotmpl
+  - name: polkadot-payouts-claimer
+    chart: w3f/polkadot-k8s-payouts
+    namespace: polkadot
+    version: v1.4.7
+    values:
+      - ./config/claimer.yaml.gotmpl
+      - ./config/polkadot/claimer.yaml.gotmpl

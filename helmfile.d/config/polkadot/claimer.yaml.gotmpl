@@ -1,5 +1,5 @@
 config:
-  wsEndpoint: "wss://rpc.polkadot.io/"
+  wsEndpoint: "wss://polkadot-asset-hub-rpc.polkadot.io/"
   targets:
   {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
   - alias: {{ $value.name }}

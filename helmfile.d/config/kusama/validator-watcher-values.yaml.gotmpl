@@ -1,3 +1,7 @@
+image:
+  repo: ironoa/polkadot-watcher
+  tag: tmp-2
+
 config:
   endpoint: "wss://kusama-rpc.polkadot.io/"
   validators: {{ if eq (len .Environment.Values.validatorsKusama) 0 }} [] {{ end }}
