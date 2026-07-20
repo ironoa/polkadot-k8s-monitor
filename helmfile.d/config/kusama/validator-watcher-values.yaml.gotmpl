@@ -9,3 +9,10 @@ config:
   - name: {{ $value.name }}
     address: {{ $value.stashAccount }}
   {{- end }}
+
+# rules live on this instance since the polkadot watcher was removed (enable on ONE instance only)
+prometheusRules:
+  enabled: true
+  origin: monitoring
+  offlineRisk: true
+  producerStall: false
