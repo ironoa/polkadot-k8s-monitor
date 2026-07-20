@@ -3,7 +3,7 @@ image:
   tag: tmp-2
 
 config:
-  endpoint: "wss://rpc.polkadot.io/"
+  endpoint: "wss://polkadot-rpc.publicnode.com/"
   validators: {{ if eq (len .Environment.Values.validatorsPolkadot) 0 }} [] {{ end }}
   {{- range $index, $value := .Environment.Values.validatorsPolkadot }}
   - name: {{ $value.name }}

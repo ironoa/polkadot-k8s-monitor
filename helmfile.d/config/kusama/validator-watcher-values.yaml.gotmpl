@@ -3,7 +3,7 @@ image:
   tag: tmp-2
 
 config:
-  endpoint: "wss://kusama-rpc.polkadot.io/"
+  endpoint: "wss://kusama-rpc.publicnode.com/"
   validators: {{ if eq (len .Environment.Values.validatorsKusama) 0 }} [] {{ end }}
   {{- range $index, $value := .Environment.Values.validatorsKusama }}
   - name: {{ $value.name }}
