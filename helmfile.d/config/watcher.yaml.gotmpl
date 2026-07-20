@@ -1,6 +1,6 @@
 image:
   repo: ironoa/polkadot-watcher
-  tag: v4.4.7
+  tag: v4.5.0
 
 config:
   environment: {{ .Environment.Name }}
@@ -16,8 +16,9 @@ serviceMonitor:
 prometheusRules:
   enabled: false #to be enabled for just one of the instances
 
+# requests sized on observed usage (~50m/160Mi), 2026-07
 resources:
   limits: null
   requests:
-    cpu: 10m
-    memory: 50Mi
+    cpu: 50m
+    memory: 160Mi

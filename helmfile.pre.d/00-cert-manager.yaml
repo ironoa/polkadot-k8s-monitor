@@ -1,5 +1,6 @@
 environments:
   production:
+---
 repositories:
   - name: jetstack
     url: https://charts.jetstack.io

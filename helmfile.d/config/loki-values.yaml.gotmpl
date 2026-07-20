@@ -1,19 +1,73 @@
-serviceMonitor:
-  enabled: true
+deploymentMode: SingleBinary
 
 loki:
   auth_enabled: false
+  # required while the active schema is still v12/boltdb; can be dropped after the
+  # 2026-07-22 tsdb/v13 cutover
+  limits_config:
+    allow_structured_metadata: false
   commonConfig:
     replication_factor: 1
   storage:
     type: 'filesystem'
+  # historical data stays on boltdb-shipper v12; new writes cut over to tsdb v13
+  schemaConfig:
+    configs:
+    - from: "2022-01-11"
+      index:
+        period: 24h
+        prefix: loki_index_
+      object_store: filesystem
+      schema: v12
+      store: boltdb-shipper
+    - from: "2026-07-22"
+      index:
+        period: 24h
+        prefix: index_
+      object_store: filesystem
+      schema: v13
+      store: tsdb
+
 singleBinary:
   replicas: 1
+# zero out the SimpleScalable targets (chart defaults are >0 and fail validation)
+read:
+  replicas: 0
+write:
+  replicas: 0
+backend:
+  replicas: 0
+  # requests sized on observed usage (~160Mi), 2026-07
+  resources:
+    requests:
+      cpu: 25m
+      memory: 200Mi
+
+# memcached caches (chart >=6 defaults) are oversized for a 2-node e2-medium cluster
+chunksCache:
+  enabled: false
+resultsCache:
+  enabled: false
+
+# selfMonitoring (grafana-agent-operator + loki-logs) is deprecated; promtail already ships logs
+monitoring:
+  serviceMonitor:
+    enabled: true
+  selfMonitoring:
+    enabled: false
+    grafanaAgent:
+      installOperator: false
+
+lokiCanary:
+  enabled: false
+
+test:
+  enabled: false
 
 #https://example.com/ready
 ingress:
   enabled: true
-  annotations: 
+  annotations:
     cert-manager.io/cluster-issuer: letsencrypt
     kubernetes.io/ingress.class: nginx
     nginx.ingress.kubernetes.io/auth-type: basic
@@ -21,7 +75,7 @@ ingress:
     nginx.ingress.kubernetes.io/auth-realm: "Enter your credentials"
   hosts:
     - {{ env "LOKI_DOMAIN" | default "example.com" | quote }}
-  tls: 
+  tls:
     - secretName: loki-tls
       hosts:
-      - {{ env "LOKI_DOMAIN" | default "example.com" | quote }} 
+      - {{ env "LOKI_DOMAIN" | default "example.com" | quote }}

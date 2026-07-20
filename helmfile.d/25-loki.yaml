@@ -8,7 +8,7 @@ repositories:
 releases:
   - name: loki
     chart: grafana/loki
-    version: 5.36.3 #https://github.com/grafana/loki/blob/111c19b38147837041c6cc7c7483abe00c0c1599/production/helm/loki/values.yaml
+    version: ^7.1.0
     namespace: monitoring
     values:
       - ./config/loki-values.yaml.gotmpl

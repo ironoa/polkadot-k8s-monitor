@@ -4,8 +4,6 @@ controller:
   service:
     externalTrafficPolicy: "Local"
   replicaCount: 1
-  stats:
-    enabled: true
   metrics:
     enabled: true
     serviceMonitor:
@@ -16,11 +14,12 @@ controller:
     server-tokens: "false"
   admissionWebhooks:
     enabled: false   
+  # requests sized on observed usage (~80Mi), 2026-07
   resources:
     limits: null
     requests:
       cpu: 10m
-      memory: 50Mi
+      memory: 90Mi
 defaultBackend:
   enabled: true
   replicaCount: 1

@@ -23,35 +23,35 @@ alertmanager:
       repeat_interval: 24h
       receiver: default
       routes:
+      # match:/match_re: removed in alertmanager >=0.28 — matchers: syntax only
+      # false positive on prometheus >=3 (metric gained a type label, histogram series
+      # is 0); a truly dead prometheus is caught by the pagerduty heartbeat instead.
+      # Drop when fixed upstream in w3f/base-services.
+      - receiver: 'null'
+        matchers:
+        - alertname = "PrometheusNotIngestingSamples"
       - receiver: pagerduty
-        match:
-          severity: critical
+        matchers:
+        - severity = "critical"
         continue: true
       - receiver: default
-        match:
-          container: promtail
+        matchers:
+        - container = "promtail"
         group_interval: 12h # No frequent nagging about changes for this alert group
       - receiver: kusama-validator-matrixbot
-        match:
-          job: kusama-validator-watcher
-          namespace: kusama
-        continue: false
-      - receiver: polkadot-validator-matrixbot
-        match:
-          job: polkadot-validator-watcher
-          namespace: polkadot
+        matchers:
+        - job = "kusama-validator-watcher"
+        - namespace = "kusama"
         continue: false
       - receiver: default
     receivers:
+    - name: 'null'
     - name: default
       webhook_configs:
       - url:  "http://matrixbot.monitoring:8080/skill/alertmanager/webhook"
     - name: kusama-validator-matrixbot
       webhook_configs:
       - url:  "http://kusama-validator-watcher-matrixbot.kusama:8080/skill/alertmanager/webhook"
-    - name: polkadot-validator-matrixbot
-      webhook_configs:
-      - url:  "http://polkadot-validator-watcher-matrixbot.polkadot:8080/skill/alertmanager/webhook"
     - name: pagerduty
       pagerduty_configs:
       - routing_key: {{ env "PAGERDUTY_INTEGRATION_KEY" | default "YOUR-INTEGRATION-KEY" }}
@@ -77,6 +77,12 @@ alertmanager:
 
 ###### GRAFANA #####
 grafana:
+  # requests sized on observed usage (~320Mi steady), 2026-07
+  resources:
+    limits: {}
+    requests:
+      cpu: 20m
+      memory: 350Mi
   persistence:
     enabled: true
     type: sts
@@ -179,18 +185,19 @@ prometheus:
     serviceMonitorSelectorNilUsesHelmValues: false
     serviceMonitorSelector: {}
 {{ if ne .Environment.Name "local" }}
+    # requests sized on observed usage (~330Mi steady) + headroom, 2026-07
     resources:
       limits: {}
       requests:
-        cpu: 10m
-        memory: 50Mi
+        cpu: 50m
+        memory: 450Mi
     storageSpec:
       volumeClaimTemplate:
         spec:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 10Gi
+              storage: 20Gi # 10Gi was filling up with 35d retention (2026-07)
     additionalScrapeConfigs:
     {{- range $index, $value := .Environment.Values.nodes }}
     - job_name: ne-{{ $value.name }}
@@ -209,7 +216,7 @@ prometheus:
 
 
 
-{{ if ne .Environment.Name "local" }}  
+{{ if ne .Environment.Name "local" }}
 kubeStateMetrics:
   resources:
     limits: {}
@@ -217,3 +224,48 @@ kubeStateMetrics:
       cpu: 2m
       memory: 16Mi
 {{ end }}
+
+
+# adopted from the orphan 2022 `prometheus-rules-custom` release (host disk alerts
+# for the scraped validator nodes)
+additionalPrometheusRulesMap:
+  node-storage:
+    groups:
+    - name: node-storage
+      rules:
+      - alert: HostOutOfDiskSpace
+        expr: (node_filesystem_avail_bytes{node=~".+"} * 100) / node_filesystem_size_bytes < 30 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        for: 2m
+        labels:
+          severity: warning
+          origin: nodes
+        annotations:
+          summary: Host out of disk space (instance {{`{{ $labels.instance }}`}})
+          message: "Disk is almost full (< 30% left)\n  VALUE = {{`{{ $value }}`}}"
+      - alert: HostOutOfDiskSpace
+        expr: (node_filesystem_avail_bytes{node=~".+"} * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        for: 2m
+        labels:
+          severity: critical
+          origin: nodes
+        annotations:
+          summary: Host out of disk space (instance {{`{{ $labels.instance }}`}})
+          message: "Disk is almost full (< 10% left)\n  VALUE = {{`{{ $value }}`}}"
+      - alert: HostDiskWillFillIn48Hours
+        expr: (node_filesystem_avail_bytes{node=~".+"} * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) predict_linear(node_filesystem_avail_bytes{node=~".+",fstype!~"tmpfs"}[1h], 48 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        for: 2m
+        labels:
+          severity: critical
+          origin: nodes
+        annotations:
+          summary: Host disk will fill in 48 hours (instance {{`{{ $labels.instance }}`}})
+          message: "Filesystem is predicted to run out of space within the next 48 hours at current write rate\n  VALUE = {{`{{ $value }}`}}"
+      - alert: HostDiskWillFillIn24Hours
+        expr: (node_filesystem_avail_bytes{node=~".+"} * 100) / node_filesystem_size_bytes < 10 and ON (instance, device, mountpoint) predict_linear(node_filesystem_avail_bytes{node=~".+",fstype!~"tmpfs"}[1h], 24 * 3600) < 0 and ON (instance, device, mountpoint) node_filesystem_readonly == 0
+        for: 2m
+        labels:
+          severity: critical
+          origin: nodes
+        annotations:
+          summary: Host disk will fill in 24 hours (instance {{`{{ $labels.instance }}`}})
+          message: "Filesystem is predicted to run out of space within the next 24 hours at current write rate\n  VALUE = {{`{{ $value }}`}}"
