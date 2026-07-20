@@ -1,18 +1,18 @@
-rbac:
-  create: true
+provider:
+  name: cloudflare
 
-provider: cloudflare
+# legacy Cloudflare global-key auth, same credentials as the previous bitnami chart
+env:
+  - name: CF_API_KEY
+    value: {{ env "CLOUDFLARE_API_KEY" | default "cloudflareApiKey" | quote }}
+  - name: CF_API_EMAIL
+    value: {{ env "CLOUDFLARE_EMAIL" | default "cloudflareEmail" | quote }}
 
-cloudflare:
-  apiKey: {{ env "CLOUDFLARE_API_KEY" | default "cloudflareApiKey" }}
-  email: {{ env "CLOUDFLARE_EMAIL" | default "cloudflareEmail" }}
-  proxied: false
-
-logLevel: info
+policy: sync # domains fully managed by the external-dns
+# unchanged from the bitnami deploy so ownership TXT records are adopted as-is
 txtOwnerId: "monitoring"
 
-policy: sync #domains fully managed by the external-dns
-
-image:
-  registry: docker.io
-  repository: bitnamilegacy/external-dns
+resources:
+  requests:
+    cpu: 10m
+    memory: 50Mi
