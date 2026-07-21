@@ -1,66 +1,69 @@
 # Polkadot-K8s-Monitor
 
-A tool to deploy a Monitoring System for your Substrate based Nodes in a Kubernetes cluster. The focus is specific on Validators.
+A tool to deploy a monitoring system for your Substrate-based nodes in a Kubernetes
+cluster, with a specific focus on validators: Prometheus + Grafana + Loki, validator
+watcher, payout claimer, alert routing to Matrix and PagerDuty — all managed
+declaratively with helmfile.
 
-## My on-chain Identity
-
-ALESSIO (Validator on Polkadot): 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP  
-ALESSIO (Validator0 on Kusama): GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX  
-ALESSIO (Validator1 on Kusama): GTuMySjzg6ibdn4sJ2XgS4cVH1LcjmXUWZyoxB5GPCCNRtx
-
-![identity](assets/identity.png)
-
+```mermaid
+flowchart LR
+    subgraph cluster["Kubernetes cluster"]
+        prom["Prometheus"] --> graf["Grafana"]
+        prom --> am["Alertmanager"]
+        watcher["validator watcher"] --> prom
+        promtail["promtail"] --> loki["Loki"] --> graf
+        am --> matrix["matrixbot → Matrix room"]
+        am --> pd["PagerDuty"]
+        claimer["payouts claimer (cronjob)"]
+    end
+    nodes["Validator / RPC nodes<br>(node-exporter + substrate metrics)"] --> prom
+    watcher -.->|wss| chain["public RPC endpoint"]
+    claimer -.->|wss| chain
+```
 
 ## Related Projects
 
-- https://github.com/ironoa/polkadot-k8s-payouts
-
-## Application Architecture
-
-![architecture](assets/architecture.png)
-
-## Youtube
-
-* [Tutorial: Local Deployment](https://www.youtube.com/watch?v=6WdcC6o49QI)
+- [w3f/polkadot-k8s-payouts](https://github.com/w3f/polkadot-k8s-payouts) — the payout claimer deployed by this stack
+- [ironoa/polkadot-watcher-validator](https://github.com/ironoa/polkadot-watcher-validator) — the validator watcher app deployed by this stack
 
 ## Table Of Contents
 
 * [Requirements](#requirements)
-* [Polkadot Secure Validator](#polkadot-secure-validator)
 * [How To Configure the Application](#how-to-configure-the-application)
 * [How To Deploy it Locally](#how-to-deploy-it-locally)
 * [How To Deploy it in Production](#how-to-deploy-it-in-production)
 * [How it will look like](#how-it-will-look-like)
-* [Future Developments](#future-developments)
+* [Troubleshooting](#troubleshooting)
 
 ## Requirements
-* kind (if you want to deploy it locally): https://kind.sigs.k8s.io/docs/user/quick-start/#installation
-* kind requires Docker: https://docs.docker.com/get-docker/
-* A Kubernetes cluster (if you don't want to use kind). Version 1.21+
-* kubectl: https://kubernetes.io/docs/tasks/tools/
-* helmfile: https://github.com/roboll/helmfile#installation => brew install helmfile (on macOS)
 
-## Polkadot Secure Validator
-This project is particularly suited to be working in synergy with the polkadot-secure-validator, the official node deployment tool from Web3 Foundation: https://github.com/w3f/polkadot-secure-validator 
+* A Kubernetes cluster, or [kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation) (+ [Docker](https://docs.docker.com/get-docker/)) for a local deployment
+* [kubectl](https://kubernetes.io/docs/tasks/tools/)
+* [helmfile](https://github.com/helmfile/helmfile) => `brew install helmfile` (on macOS)
 
 ## How To Configure the Application
 
-You can find a sample of the nodes related yaml config file [here](config/nodes.sample.yaml).  
+Two yaml config files describe what to monitor:
+* [config/nodes.sample.yaml](config/nodes.sample.yaml) — the machines to scrape (node-exporter + substrate metrics)
+* [config/validators.sample.yaml](config/validators.sample.yaml) — the stash accounts the watcher and the claimer act on
 
 ```yaml
-validatorsPolkadot:
-- name: polkadot-node-0
-  stashAccount: YourPolkadotStashAddress
-  ip: x.x.x.x   
-validatorsKusama: 
+# config/nodes.yaml
+nodes:
 - name: kusama-node-0
+  ip: x.x.x.x
+  nodeExporterPort: 9100 #Optional
+  validatorMetricsPort: 9616 #Optional
+
+# config/validators.yaml
+validatorsKusama:
+- name: kusama-validator-0
   stashAccount: YourKusamaStashAddress
-  ip: x.x.x.x 
 ```
 
-You can find two samples of the environment variables related files, meant to contain also your secrets and your passwords:  
-* the complete configuration [file](config/env.sample.complete.sh), production ready  
-* the local configuration [file](config/env.sample.local.sh), ready to be deployed into a local kind cluster  
+You can find two samples of the environment variables related files, meant to contain also your secrets and your passwords:
+* the complete configuration [file](config/env.sample.complete.sh), production ready
+* the local configuration [file](config/env.sample.local.sh), ready to be deployed into a local kind cluster
 
 ```sh
 export GRAFANA_PASSWORD="xxx" #Optional: default "admin"
@@ -73,10 +76,6 @@ export KUSAMA_VALIDATOR_MATRIXBOT_USER='@xxx:matrix.org'
 export KUSAMA_VALIDATOR_MATRIXBOT_PASSWORD='xxx'
 export KUSAMA_VALIDATOR_MATRIXBOT_ROOM_ID='!xxx:matrix.org'
 
-export POLKADOT_VALIDATOR_MATRIXBOT_USER='@xxx:matrix.org'
-export POLKADOT_VALIDATOR_MATRIXBOT_PASSWORD='xxx'
-export POLKADOT_VALIDATOR_MATRIXBOT_ROOM_ID='!xxx:matrix.org'
-
 export MATRIXBOT_USER='@xxx:matrix.org'
 export MATRIXBOT_PASSWORD='xxx'
 export MATRIXBOT_ROOM_ID='!xxx:matrix.org'
@@ -84,37 +83,43 @@ export MATRIXBOT_ROOM_ID='!xxx:matrix.org'
 ```
 
 ## How To Deploy it Locally
-I'd reccomend to test first this approach 
+
+I'd recommend to test first this approach
 
 ```bash
-git clone https://github.com/ironoa/polkadot-k8s-monitor.git
+git clone git@github.com:ironoa/polkadot-k8s-monitor.git
 cd polkadot-k8s-monitor
 cp config/env.sample.local.sh config/env.sh #create the default env config file
-cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config file
-#just the fist time
+cp config/nodes.sample.yaml config/nodes.yaml
+cp config/validators.sample.yaml config/validators.yaml
+#just the first time
 
 ./scripts/deployLocal.sh
 # just re trigger it to deploy configuration changes
-
-#if you want to delete your local cluster
-#./scripts/uninstallLocal.sh
 ```
 
+To delete the local cluster: `./scripts/uninstallLocal.sh`
+
 ## How To Deploy it in Production
-First, connect yourself to your chosen kubernetes cluster.
+
+First, connect yourself to your chosen kubernetes cluster (the deploy targets the
+**current kubectl context** — the script prints it before acting).
 
 ```bash
-git clone https://github.com/ironoa/polkadot-k8s-monitor.git 
+git clone git@github.com:ironoa/polkadot-k8s-monitor.git
 cd polkadot-k8s-monitor
 cp config/env.sample.complete.sh config/env.sh #create the default env config file
-cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config file
-#just the fist time
+cp config/nodes.sample.yaml config/nodes.yaml
+cp config/validators.sample.yaml config/validators.yaml
+#just the first time
 
-./scripts/deployProduction.sh
-# just re trigger it to deploy configuration changes
+./scripts/deployProduction.sh          # sync the whole stack (helmfile.d)
+./scripts/deployProduction.sh 60 70    # sync only helmfile.d/60-*.yaml and 70-*.yaml
+./scripts/deployProduction.sh pre      # sync helmfile.pre.d (cert-manager)
 ```
 
 ## How it will look like
+
 ![grafanaNodeLoad](assets/grafanaNodeLoad.png)
 ![grafanaNodeChainStatus](assets/grafanaNodeChainStatus.png)
 ![clusterAlerts](assets/clusterAlerts.png)
@@ -122,8 +127,5 @@ cp config/nodes.sample.yaml config/nodes.yaml #create the default nodes config f
 
 ## Troubleshooting
 
-- Prometheus: [Upgrading an existing Release to a new major version](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#upgrading-an-existing-release-to-a-new-major-version)
-
-## Future Developments
-- [ ] Improve the documentation
-- [X] Youtube tutorials 
+- Prometheus major upgrades: [upgrading an existing kube-prometheus-stack release](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#upgrading-an-existing-release-to-a-new-major-version) — CRDs must be applied manually between chart majors
+- Loki major upgrades: schema changes require a future-dated `schemaConfig` entry, never edit past entries ([storage schema docs](https://grafana.com/docs/loki/latest/operations/storage/schema/))
