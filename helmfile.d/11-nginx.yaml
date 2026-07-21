@@ -1,5 +1,6 @@
 environments:
   production:
+  local:
 ---
 repositories:
   - name: ingress-nginx

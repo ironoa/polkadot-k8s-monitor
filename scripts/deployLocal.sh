@@ -7,7 +7,7 @@ cd ${CURRENT_DIR}
 CLUSTER_NAME="monitoring"
 
 if ! [ -f ../config/env.sh ]; then
-  echo "env.sh does not exist. Use env.sample.sh as example to generate it." >&2
+  echo "env.sh does not exist. Use config/env.sample.local.sh as example to generate it." >&2
   exit 1
 fi
 

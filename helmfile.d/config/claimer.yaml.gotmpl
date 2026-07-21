@@ -8,8 +8,6 @@ config:
       enabled: false
       eras: 2
 
-cronjob:
-  timeout: false
-  concorruencyPolicy: Forbid
-  backoffLimit: 6
-  restartPolicy: OnFailure  
+# cronjob retry/timeout settings: chart defaults on purpose (timeout 1200s,
+# concurrencyPolicy Forbid, backoffLimit 0, restartPolicy Never) — the app owns
+# retries internally, k8s-level retries on top would resubmit fee-charging batches  

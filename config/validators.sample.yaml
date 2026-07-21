@@ -1,6 +1,3 @@
-validatorsPolkadot:
-- name: polkadot-validator-0
-  stashAccount: YourPolkadotStashAddress
 validatorsKusama:
 - name: kusama-validator-0
   stashAccount: YourKusamaStashAddress

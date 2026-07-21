@@ -1,7 +1,5 @@
 nodes:
-- name: polkadot-node-0
-  ip: x.x.x.x   
 - name: kusama-node-0
-  ip: x.x.x.x 
+  ip: x.x.x.x
   nodeExporterPort: 9100 #Optional
   validatorMetricsPort: 9616 #Optional
