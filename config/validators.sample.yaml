@@ -1,6 +1,6 @@
 validatorsPolkadot:
-- name: ALESSIO
-  stashAccount: 16cdSZUq7kxq6mtoVMWmYXo62FnNGT9jzWjVRUg87CpL9pxP
-validatorsKusama: 
-- name: ALESSIO-0
-  stashAccount: GaK38GT7LmgCpRSTRdDC2LeiMaV9TJmx8NmQcb9L3cJ3fyX
+- name: polkadot-validator-0
+  stashAccount: YourPolkadotStashAddress
+validatorsKusama:
+- name: kusama-validator-0
+  stashAccount: YourKusamaStashAddress
